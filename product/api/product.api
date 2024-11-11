@@ -1,0 +1,70 @@
+syntax = "v1"
+
+type (
+	ResultProductGetResp {
+		Code    int32          `json:"code"`
+		Message string         `json:"message"`
+		Data    ProductGetResp `json:"data"`
+	}
+
+	ResultProductListResp {
+		Code    int32           `json:"code"`
+		Message string          `json:"message"`
+		Data    ProductListResp `json:"data"`
+	}
+
+	ResultProductCreateResp {
+		Code    int32             `json:"code"`
+		Message string            `json:"message"`
+		Data    ProductCreateResp `json:"data"`
+	}
+)
+
+type (
+	ProductGetReq {
+		ProductId int64 `json:"productId"`
+	}
+
+	ProductGetResp {
+		ProductName     string `json:"productName"`
+		ProductQuantity int64  `json:"productQuantity"`
+		ProductEan      string `json:"productEan"`
+	}
+)
+
+type (
+	ProductListReq {
+		Page     int32 `json:"page"`
+		PageSize int32 `json:"pageSize"`
+	}
+	ProductListResp {
+		Products []ProductGetResp `json:"products"`
+		Total    int32            `json:"total"`
+	}
+)
+
+type (
+	ProductCreateReq {
+		ProductName     string `json:"productName"`
+		ProductQuantity int64  `json:"productQuantity"`
+		ProductEan      string `json:"productEan"`
+	}
+	ProductCreateResp {
+		ProductId int64 `json:"productId"`
+	}
+)
+
+@server (
+	group: product
+	prefix: /api/v1
+)
+service product {
+	@handler productGet
+	get /product/get (ProductGetReq) returns (ResultProductGetResp)
+	
+	@handler productList
+	get /product/list (ProductListReq) returns (ResultProductListResp)
+	
+	@handler productCreate
+	post /product/create (ProductCreateReq) returns (ResultProductCreateResp)
+}

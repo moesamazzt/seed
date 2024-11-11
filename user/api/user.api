@@ -1,0 +1,42 @@
+syntax = "v1"
+
+info(
+	title: "v2space-user"
+	desc: "go micro service user"
+	author: "moesama_zzt"
+	email: "moesamma_zzt"
+	version: "0.1"
+)
+
+type (
+	UserLoginRequest {
+		UserNumber   string `json:"userNumber"`
+		UserPassword string `json:"userPassword"`
+	}
+	UserRegisterRequest {
+		UserName     string `json:"userName"`
+		UserPassword string `json:"userPassword"`
+	}
+)
+
+type (
+	UserLoginResponse {
+		Token string `json:"token"`
+	}
+	UserRegisterResponse {
+		UserNumber string `json:"userNumber"`
+	}
+)
+
+@server(
+	jwt: Auth
+	group: user
+	prefix: /api/v1/user
+)
+service user {
+	@handler login
+	get /login (UserLoginRequest) returns (UserLoginResponse)
+	
+	@handler register
+	post /register (UserRegisterRequest) returns (UserRegisterResponse)
+}
