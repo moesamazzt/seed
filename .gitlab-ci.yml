@@ -1,3 +1,6 @@
+services:
+  - docker:24.0.5-dind
+
 stages:
   - build_image
   - deploy_prod
