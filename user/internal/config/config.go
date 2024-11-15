@@ -9,3 +9,7 @@ type Config struct {
 		AccessExpire int64
 	}
 }
+
+type MysqlConfig struct {
+	DataSource string
+}

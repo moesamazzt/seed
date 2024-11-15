@@ -1,10 +1,10 @@
 syntax = "v1"
 
-info(
-	title: "v2space-user"
-	desc: "go micro service user"
-	author: "moesama_zzt"
-	email: "moesamma_zzt"
+info (
+	title:   "v2space-user"
+	desc:    "go micro service user"
+	author:  "moesama_zzt"
+	email:   "moesamma_zzt"
 	version: "0.1"
 )
 
@@ -28,15 +28,16 @@ type (
 	}
 )
 
-@server(
-	jwt: Auth
-	group: user
+@server (
+	jwt:    Auth
+	group:  account
 	prefix: /api/v1/user
 )
 service user {
 	@handler login
 	get /login (UserLoginRequest) returns (UserLoginResponse)
-	
+
 	@handler register
 	post /register (UserRegisterRequest) returns (UserRegisterResponse)
 }
+
