@@ -1,0 +1,51 @@
+syntax = "v1"
+
+info (
+	title:   "v2space-chat"
+	desc:    "Go micro service for chat functionality"
+	author:  "moesamazzt"
+	email:   "moesammazzt@gmail.com"
+	version: "0.1"
+)
+
+type (
+	// 订阅请求结构
+	SubscribeReq {
+		userId string `path:"userId"` // 用户ID，标识订阅者
+	}
+	// 订阅响应结构
+	SubscribeResp {
+		status  string // 订阅状态，如 "success" 或 "failed"
+		message string // 附加信息
+	}
+)
+
+type (
+	// 发送消息请求结构
+	SendReq {
+		userId   string `json:"userId"` // 用户ID，消息发送者
+		targetId string `json:"targetId"` // 目标用户或群组ID
+		message  string `json:"message"` // 消息内容
+	}
+	// 发送消息响应结构
+	SendResp {
+		status  string // 消息发送状态，如 "success" 或 "failed"
+		message string // 附加信息
+	}
+)
+
+@server (
+	// 定义服务组名和前缀
+	group:  sse
+	prefix: /api/chat/sse
+)
+service chat {
+	// 订阅接口
+	@handler subscribe
+	get /subscribe (SubscribeReq) returns (SubscribeResp)
+
+	// 消息发送接口
+	@handler send
+	post /send (SendReq) returns (SendResp)
+}
+

@@ -2,42 +2,75 @@ syntax = "v1"
 
 info (
 	title:   "v2space-user"
-	desc:    "go micro service user"
-	author:  "moesama_zzt"
-	email:   "moesamma_zzt"
+	desc:    "Go micro service for user functionality"
+	author:  "moesamazzt"
+	email:   "moesammazzt@gmail.com"
 	version: "0.1"
 )
 
 type (
-	UserLoginRequest {
-		UserNumber   string `json:"userNumber"`
-		UserPassword string `json:"userPassword"`
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
 	}
-	UserRegisterRequest {
-		UserName     string `json:"userName"`
-		UserPassword string `json:"userPassword"`
+	LoginResp {
+		AccessToken  string `json:"accessToken"`
+		RefreshToken string `json:"refreshToken"`
 	}
 )
 
 type (
-	UserLoginResponse {
-		Token string `json:"token"`
+	RegisterReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Email    string `json:"email"`
 	}
-	UserRegisterResponse {
-		UserNumber string `json:"userNumber"`
+)
+
+type (
+	RefreshReq {
+		AccessToken string `json:"accessToken"`
+	}
+	RefreshResp {
+		RefreshToken string `json:"refreshToken"`
+	}
+)
+
+type (
+	BaseResp {
+		Username string `json:"username"`
+		Nickname string `json:"nickname"`
+		Email    string `json:"email"`
 	}
 )
 
 @server (
-	jwt:    Auth
-	group:  account
-	prefix: /api/v1/user
+	group:    account
+	prefix:   /api/user/account
+	timeout:  10s
+	maxBytes: 1048576
 )
 service user {
 	@handler login
-	get /login (UserLoginRequest) returns (UserLoginResponse)
+	get /login (LoginReq) returns (LoginResp)
 
 	@handler register
-	post /register (UserRegisterRequest) returns (UserRegisterResponse)
+	post /register (RegisterReq)
+
+	@handler refresh
+	post /refresh (RefreshReq) returns (RefreshResp)
+}
+
+@server (
+	jwt:        Auth
+	middleware: AuthInterceptor
+	group:      profile
+	prefix:     /api/user/profile
+	timeout:    10s
+	maxBytes:   1048576
+)
+service user {
+	@handler base
+	get /base returns (BaseResp)
 }
 

@@ -26,8 +26,7 @@ deploy_prod_user:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
   script:
-    - cd user
-#    - docker push myregistry/user:test
+    - sshpass -p '$USER_SERVER_PWD'
     - echo "Deployed Environment seed-user Service!!"
   only:
     - main
